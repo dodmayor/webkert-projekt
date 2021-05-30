@@ -1,0 +1,11 @@
+<app-customer-form-card [customer]="customer!" [modifying]="true" (onCustomerSubmit)="modifyCustomer($event)">
+</app-customer-form-card>
+
+<ng-container [ngSwitch]="status">
+  <div *ngSwitchCase="'success'">
+    Customer successfully modified:
+    <a [routerLink]="['/customer/view', customerId]" routerLinkActive="router-link-active">View here</a>
+  </div>
+  <div *ngSwitchCase="'error'">Error occured during Customer modifying: {{error}}</div>
+  <div *ngSwitchDefault></div>
+</ng-container>

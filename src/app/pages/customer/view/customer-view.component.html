@@ -1,0 +1,47 @@
+<h2 *ngIf="!customer && !deleted">Invalid Customer ID</h2>
+<h2 *ngIf="deleted">Customer successfully deleted!</h2>
+
+<mat-card *ngIf="customer" appOnHover>
+  <mat-card-title>{{customer.name}}</mat-card-title>
+  <mat-card-content>
+    <div style="margin: 5px 0;">Addresses</div>
+    <mat-divider inset="true"></mat-divider>
+    <div class="address-container">
+      <mat-list>
+        <mat-list-item *ngFor="let addr of customer.contactMedium">
+          <span matLine *ngIf="addr.characteristic.country">Country: {{addr.characteristic.country}}</span>
+          <span matLine smallText *ngIf="addr.characteristic.stateOrProvince">State/Province:
+            {{addr.characteristic.stateOrProvince}}</span>
+          <span matLine smallText *ngIf="addr.characteristic.postCode || addr.characteristic.city">City:
+            {{addr.characteristic.postCode}}
+            {{addr.characteristic.city}}</span>
+          <span matLine smallText *ngIf="addr.characteristic.street1">Street 1: {{addr.characteristic.street1}}</span>
+          <span matLine smallText *ngIf="addr.characteristic.street2">Street 2: {{addr.characteristic.street2}}</span>
+          <span matLine smallText *ngIf="addr.characteristic.emailAddress">Email:
+            {{addr.characteristic.emailAddress}}</span>
+          <span matLine smallText *ngIf="addr.characteristic.faxNumber">Fax: {{addr.characteristic.faxNumber}}</span>
+          <span matLine smallText *ngIf="addr.characteristic.phoneNumber">Phone:
+            {{addr.characteristic.phoneNumber}}</span>
+          <span matLine smallText *ngIf="addr.characteristic.socialNetworkId">Network ID:
+            {{addr.characteristic.socialNetworkId}}</span>
+          <span matLine smallText *ngIf="addr.preferred">{{addr.preferred ? 'Preferred' : 'Not preferred'}}</span>
+        </mat-list-item>
+      </mat-list>
+    </div>
+    <mat-divider inset="true"></mat-divider>
+    <div *ngIf="customer.status">Status: {{customer.status}}</div>
+    <div>Status reason: {{customer.statusReason}}</div>
+    <ng-container *ngIf="customer.validFor">
+      <span matLine>Valid for: </span>
+      <span>{{customer.validFor.startDateTime}} - {{customer.validFor.endDateTime}}</span>
+    </ng-container>
+  </mat-card-content>
+  <mat-card-footer style="display: flex; justify-content: flex-end; align-items: flex-end;">
+    <span style="flex-grow: 1; padding: 5px;">
+      ID: {{customer.id}}
+    </span>
+    <button mat-raised-button color="primary" [routerLink]="['/customer/modify', customer.id]"
+      routerLinkActive="router-link-active" appOnHover>Modify</button>
+    <button mat-raised-button color="warn" class="max-width" (click)="deleteCustomer()" appOnHover>Delete</button>
+  </mat-card-footer>
+</mat-card>

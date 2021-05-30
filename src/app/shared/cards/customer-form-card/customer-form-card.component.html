@@ -1,0 +1,86 @@
+<mat-card *ngIf="customer">
+  <mat-card-title>{{modifying ? 'Modify' : 'Add'}} Customer</mat-card-title>
+  <mat-card-content>
+    <form [formGroup]="customerForm" (ngSubmit)="submitCustomer()">
+      <mat-form-field class="max-width">
+        <mat-label>Name</mat-label>
+        <input matInput placeholder="ex. Kif Lee" focus formControlName="name" required>
+        <mat-error>Required, Min length: 3</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="max-width">
+        <mat-label>Status</mat-label>
+        <mat-select formControlName="status" required>
+          <mat-option *ngFor="let st of statusOptions" [value]="st">
+            {{st}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="max-width">
+        <mat-label>Status reason</mat-label>
+        <input matInput placeholder="ex. Rejected because..." focus formControlName="statusReason">
+        <mat-error>Min length: 3</mat-error>
+      </mat-form-field>
+
+      <div style="margin: 5px 0;">Valid for</div>
+      <div formGroupName="validFor" style="display: flex; justify-content: space-between;">
+        <mat-form-field appearance="fill" style="width: 45%;">
+          <mat-label>Start date</mat-label>
+          <input matInput [matDatepicker]="startPicker" formControlName="startDateTime">
+          <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+          <mat-datepicker #startPicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" style="width: 45%;">
+          <mat-label>End date</mat-label>
+          <input matInput [matDatepicker]="endPicker" formControlName="endDateTime">
+          <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+          <mat-datepicker #endPicker></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <div style="margin: 5px 0;">Addresses</div>
+      <mat-divider inset="true"></mat-divider>
+      <div class="address-container">
+        <mat-list>
+          <mat-list-item *ngFor="let addr of contactMediumArray">
+            <span matLine *ngIf="addr.characteristic.country">{{addr.characteristic.country}}</span>
+            <span matLine smallText
+              *ngIf="addr.characteristic.stateOrProvince">{{addr.characteristic.stateOrProvince}}</span>
+            <span matLine smallText
+              *ngIf="addr.characteristic.postCode || addr.characteristic.city">{{addr.characteristic.postCode}}
+              {{addr.characteristic.city}}</span>
+            <span matLine smallText *ngIf="addr.characteristic.street1">{{addr.characteristic.street1}}</span>
+            <span matLine smallText *ngIf="addr.characteristic.street2">{{addr.characteristic.street2}}</span>
+            <span matLine smallText *ngIf="addr.characteristic.emailAddress">{{addr.characteristic.emailAddress}}</span>
+            <span matLine smallText *ngIf="addr.characteristic.faxNumber">{{addr.characteristic.faxNumber}}</span>
+            <span matLine smallText *ngIf="addr.characteristic.phoneNumber">{{addr.characteristic.phoneNumber}}</span>
+            <span matLine smallText
+              *ngIf="addr.characteristic.socialNetworkId">{{addr.characteristic.socialNetworkId}}</span>
+            <span matLine smallText *ngIf="addr.preferred">{{addr.preferred ? 'Preferred' : 'Not preferred'}}</span>
+
+            <button mat-icon-button type="button" (click)="editAddress(addr)" color="primary" appOnHover>
+              <mat-icon>edit</mat-icon>
+            </button>
+
+            <button mat-icon-button type="button" (click)="removeAddress(addr)" color="warn" appOnHover>
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-list-item>
+        </mat-list>
+        <button mat-raised-button type="button" (click)="addAddress()" appOnHover>
+          <mat-icon>add</mat-icon>
+          <span>Address</span>
+        </button>
+      </div>
+      <mat-divider inset="true"></mat-divider>
+
+      <div style="display: flex; justify-content: flex-end; align-items: center;">
+        <button type="reset" mat-raised-button color="warn" appOnHover>RESET</button>
+        <button type="submit" mat-raised-button color="primary" class="max-width" [disabled]="customerForm.invalid"
+          appOnHover>{{modifying ? 'MODIFY' : 'ADD'}}</button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
